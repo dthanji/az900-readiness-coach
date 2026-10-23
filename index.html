@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AZ-900 Readiness Coach (Unofficial)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{--bg:#F2F5F4;--surface:#fff;--ink:#12302C;--muted:#566B67;--brand:#0B6B5D;--onbrand:#fff;--accent:#E8A317;--ok:#1E7F4F;--okbg:#E3F3EA;--bad:#B3372F;--badbg:#FBE9E7;--line:#D3DDDA;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1A18;--surface:#162624;--ink:#E6F0EE;--muted:#9DB3AF;--brand:#3FC1A9;--onbrand:#06201B;--accent:#F0B63A;--ok:#6FD39A;--okbg:#14352A;--bad:#FF8F86;--badbg:#3A1E1B;--line:#2B403D}}
+:root[data-theme="dark"]{--bg:#0E1A18;--surface:#162624;--ink:#E6F0EE;--muted:#9DB3AF;--brand:#3FC1A9;--onbrand:#06201B;--accent:#F0B63A;--ok:#6FD39A;--okbg:#14352A;--bad:#FF8F86;--badbg:#3A1E1B;--line:#2B403D}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 "Source Sans 3",system-ui,sans-serif}
+h1,h2,h3{font-family:Sora,system-ui,sans-serif;line-height:1.2;margin:0}
+main{max-width:720px;margin:0 auto;padding:20px 16px 48px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+h1{font-size:1.35rem}
+.badge{border:1.5px solid var(--accent);color:var(--ink);border-radius:99px;padding:2px 12px;font-size:.85rem;font-weight:600}
+nav{display:flex;gap:8px;margin-bottom:16px}
+button{font:inherit;cursor:pointer;color:inherit}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.tab,.chip{background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:8px 14px}
+.tab[aria-selected=true],.chip[aria-pressed=true]{background:var(--brand);color:var(--onbrand);border-color:var(--brand);font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.q{font-size:1.15rem;font-weight:600;margin:6px 0 16px}
+.meta{color:var(--muted);font-size:.9rem}
+.opt{display:block;width:100%;text-align:left;background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.opt:hover:not(:disabled){border-color:var(--brand)}
+.opt.ok{background:var(--okbg);border-color:var(--ok)}
+.opt.bad{background:var(--badbg);border-color:var(--bad)}
+.opt:disabled{cursor:default}
+.why{margin-top:14px;padding:14px;border-radius:10px;background:var(--bg);border-left:4px solid var(--brand)}
+.why.ok{border-color:var(--ok)}.why.bad{border-color:var(--bad)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.btn{background:var(--brand);color:var(--onbrand);border:0;border-radius:10px;padding:10px 18px;font-weight:600}
+.btn.alt{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.simple{margin-top:12px;white-space:pre-wrap}
+.status{font-family:Sora,sans-serif;font-size:1.6rem;margin:4px 0 12px}
+.meter{height:16px;border-radius:99px;background:var(--line);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--brand);transition:width .4s}
+.dom{margin-top:18px}.dom b{display:flex;justify-content:space-between;gap:8px}
+.weak{padding-left:20px;margin:8px 0 0}
+footer{margin-top:28px;color:var(--muted);font-size:.85rem}
+@media (prefers-reduced-motion:reduce){.meter i{transition:none}}
+</style>
+</head>
+<body>
+<main>
+<header><h1>AZ-900 Readiness Coach</h1><span class="badge">Unofficial study aid</span></header>
+<nav role="tablist"><button class="tab" role="tab" id="t0" aria-selected="true">Practice</button><button class="tab" role="tab" id="t1" aria-selected="false">Readiness</button></nav>
+<section id="practice"><div class="chips" id="chips"></div><div class="card" id="card"></div></section>
+<section id="dash" hidden></section>
+<footer>Unofficial. Not affiliated with or endorsed by Microsoft. All questions are original and based on the public AZ-900 skills outline. Progress is saved in this browser only.</footer>
+</main>
+<script>
+const D=["Cloud concepts","Architecture and services","Management and governance"];
+// [domain, question, options, correct index, explanation (why right + why the others are wrong)]
+const Q=[
+[0,"A Nairobi retailer wants to stop buying servers up front and pay only for what it uses each month. Which expense model is that?",["CapEx","OpEx","Depreciation","Capital lease"],1,"OpEx: you pay for usage as a running cost. CapEx is up-front spending on assets such as servers. Depreciation and capital leases are accounting terms for owned or leased assets, not the cloud pay-as-you-go model."],
+[0,"Traffic on a mobile-money app jumps 10x on payday, then falls back. Which cloud benefit adds and removes resources automatically to match?",["Fault tolerance","Governance","Elasticity","Predictability"],2,"Elasticity scales resources up and down with demand. Fault tolerance is surviving a failure, governance is rules and compliance, and predictability is about steady performance and cost."],
+[0,"In an IaaS virtual machine, who is responsible for patching the guest operating system?",["Microsoft","The customer","The internet provider","Nobody, it updates itself"],1,"In IaaS you manage the OS, apps and data; Microsoft runs the physical hosts and network. Your internet provider is not involved, and the OS does not patch itself unless you configure it."],
+[0,"A bank keeps customer records in its own datacentre but runs its mobile app front end in Azure. Which cloud model is this?",["Public cloud only","Private cloud only","Hybrid cloud","Multi-region"],2,"Hybrid cloud combines on-premises or private systems with public cloud. Public-only would put everything in Azure, private-only keeps everything in-house, and multi-region just describes where Azure resources are placed."],
+[0,"A developer wants to deploy a web app without managing servers or the operating system. Which service type fits best?",["IaaS","SaaS","PaaS","On-premises"],2,"PaaS (for example Azure App Service) manages the OS and runtime, so you manage only the app and data. IaaS leaves the OS to you, SaaS is finished software you just use, and on-premises means you run everything."],
+[0,"In every cloud service model, including SaaS, what always remains the customer’s responsibility?",["Physical datacentre security","The hypervisor","Their data and who can access it","Datacentre power and cooling"],2,"Customers always own their data and identities. Microsoft always handles the physical datacentre, power, cooling and the host layer."],
+[1,"Which term describes one or more datacentres in a region with independent power, cooling and networking?",["Resource group","Availability zone","Subscription","Management group"],1,"Availability zones protect against a datacentre failure. Resource groups, subscriptions and management groups are organisational containers, not physical locations."],
+[1,"Where would you store photos and backup files as unstructured data?",["Azure Blob Storage","Azure Virtual Network","Azure SQL Database","Azure Key Vault"],0,"Blob Storage holds unstructured objects. A virtual network connects resources, SQL Database stores relational tables, and Key Vault keeps secrets and keys."],
+[1,"Which logical container groups related Azure resources so you can manage and delete them together?",["Region","Virtual network","Resource group","Availability set"],2,"A resource group shares one lifecycle for the resources in it. A region is a location, a virtual network is networking, and an availability set spreads VMs across hardware."],
+[1,"Code should run only when a new file arrives, with no servers to manage and pay-per-execution billing. Which service fits?",["Virtual Machines","Azure Functions","Azure Bastion","Azure Disk Storage"],1,"Azure Functions is serverless and event-driven. Virtual Machines must be managed, Bastion gives secure remote login to VMs, and Disk Storage is just storage."],
+[1,"Which service gives a private, dedicated connection from your network to Azure that does not cross the public internet?",["VPN Gateway","ExpressRoute","Azure DNS","Load Balancer"],1,"ExpressRoute uses a provider’s private link. VPN Gateway is encrypted but travels over the public internet. DNS resolves names and Load Balancer spreads traffic."],
+[1,"Which service provides single sign-on and multifactor authentication for users?",["Azure Policy","Azure Monitor","Microsoft Entra ID","Azure Advisor"],2,"Microsoft Entra ID is the cloud identity service. Policy enforces rules on resources, Monitor collects telemetry, and Advisor makes recommendations."],
+[2,"Before deploying, which tool estimates the monthly cost of the Azure services you plan to use?",["Pricing calculator","Azure Advisor","Service Health","Azure Arc"],0,"The pricing calculator estimates future cost. Advisor recommends improvements, Service Health reports Azure incidents, and Arc manages servers outside Azure."],
+[2,"You want to block anyone from creating resources outside approved regions. Which service enforces this?",["Azure RBAC","Azure Monitor","Azure Policy","A resource lock"],2,"Azure Policy enforces rules on resource properties such as location. RBAC controls what people can do, Monitor observes, and locks only protect against changes or deletion."],
+[2,"Which feature stops a production resource from being deleted by mistake, even by an owner?",["Tag","Resource lock","Management group","Azure Advisor"],1,"A CanNotDelete lock blocks deletion until it is removed. Tags only label resources, management groups organise subscriptions, and Advisor only recommends."],
+[2,"A support agent must restart virtual machines but not delete them. Which service grants exactly that?",["Azure RBAC","Azure Policy","Resource lock","Azure DNS"],0,"RBAC assigns roles with specific permissions to people. Policy governs resources rather than people, a lock applies to everyone, and DNS resolves names."],
+[2,"Which tool gives personalised recommendations to improve reliability, security and cost?",["Azure Policy","Pricing calculator","Azure Resource Manager","Azure Advisor"],3,"Azure Advisor analyses your resources and recommends fixes. Policy enforces rules, the calculator estimates cost, and Resource Manager is the deployment and management layer."],
+[2,"Which service lets you manage servers in your own datacentre and in other clouds from Azure?",["Azure Bastion","Azure Arc","Azure Backup","Azure Cost Management"],1,"Azure Arc projects non-Azure servers into Azure management. Bastion gives secure remote login, Backup protects data, and Cost Management tracks spending."],
+[0,"Which option lets you pay only for the compute you actually consume, instead of for idle capacity?",["Consumption-based pricing","Fixed licensing","Hardware refresh","Dedicated leasing"],0,"Consumption-based pricing bills for actual use. Fixed licensing and dedicated leasing charge regardless of usage, and hardware refresh is the on-premises cycle of replacing old servers."],
+[0,"What does a 99.9% SLA describe?",["The share of data that is encrypted","The percentage of costs saved","The number of regions used","The uptime the provider commits to"],3,"An SLA states the availability Microsoft commits to; 99.9% allows a small amount of downtime each month. It says nothing about encryption, savings or how many regions you use."],
+[0,"Which of these is an example of SaaS?",["A virtual machine you configure","Microsoft 365 email","An Azure virtual network","A database server you patch yourself"],1,"SaaS is complete software delivered over the internet, like Microsoft 365 email. The other options are infrastructure you configure or maintain yourself."],
+[0,"A startup in Kigali adds more instances of its app as users increase. What is this called?",["Vertical scaling","Failover","Horizontal scaling","Migration"],2,"Horizontal scaling adds more instances. Vertical scaling makes one machine bigger with more CPU or RAM, failover switches to a backup, and migration moves workloads between environments."],
+[1,"What is an Azure region pair?",["Two datacentres in one building","Two regions in the same geography, used for recovery","Two subscriptions linked for billing","Two resource groups sharing tags"],1,"A region pair links two regions in the same geography so updates and disaster recovery can be staged. The other options describe things that are not region pairs."],
+[1,"Which service is a fully managed relational database that uses SQL?",["Azure Cosmos DB","Azure Blob Storage","Azure SQL Database","Azure Queue Storage"],2,"Azure SQL Database is a managed relational service. Cosmos DB is a NoSQL database, Blob Storage holds unstructured objects, and Queue Storage holds messages."],
+[1,"Which service spreads incoming traffic across several healthy virtual machines?",["Azure Backup","Azure Key Vault","Azure Bastion","Azure Load Balancer"],3,"Load Balancer distributes traffic to healthy instances. Backup protects data, Key Vault stores secrets, and Bastion gives secure remote login to VMs."],
+[1,"Which service runs containers on demand without you managing servers?",["Azure Files","Azure Container Instances","Azure Virtual Desktop","Azure ExpressRoute"],1,"Container Instances runs containers with no servers to manage. Files provides file shares, Virtual Desktop delivers Windows desktops, and ExpressRoute is a private network link."],
+[2,"What does Azure Monitor do?",["Estimates future costs","Collects and analyses metrics and logs from your resources","Enforces allowed locations","Stores secrets and certificates"],1,"Monitor gathers and analyses telemetry so you can see how resources behave. Estimating cost is the pricing calculator, enforcing locations is Policy, and secrets belong in Key Vault."],
+[2,"Which tool lets you manage Azure resources from a command line on Windows, macOS or Linux?",["Azure Advisor","Azure Policy","Azure CLI","Azure Arc"],2,"Azure CLI is a cross-platform command-line tool. Advisor recommends improvements, Policy enforces rules, and Arc extends management to servers outside Azure."],
+[2,"Where do you check whether an Azure incident or planned maintenance is affecting your resources?",["Cost Management","Azure Service Health","Azure Policy","A resource lock"],1,"Service Health reports incidents and maintenance that affect your resources. Cost Management tracks spend, Policy enforces rules, and a lock prevents changes or deletion."],
+[2,"What are tags used for in Azure?",["Blocking deletion of a resource","Granting users permissions","Connecting two networks","Labelling resources with name-value pairs for organising and cost reporting"],3,"Tags are labels such as department=sales that help you organise resources and group costs. Locks block deletion, RBAC grants permissions, and peering or VPNs connect networks."]
+];
+const KEY="az900-coach-v1";
+let S={};try{S=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const $=id=>document.getElementById(id);
+let mode="all",queue=[],cur=null;
+
+function chips(){
+  const miss=Object.keys(S).filter(i=>!S[i].ok).length;
+  const items=[["all","All topics"],[0,D[0]],[1,D[1]],[2,D[2]],["miss","Review my misses ("+miss+")"]];
+  $("chips").innerHTML="";
+  items.forEach(([m,l])=>{const b=document.createElement("button");b.className="chip";b.textContent=l;b.setAttribute("aria-pressed",String(m===mode));b.onclick=()=>{mode=m;start()};$("chips").appendChild(b)});
+}
+function start(){
+  queue=Q.map((_,i)=>i).filter(i=>mode==="all"||(mode==="miss"?S[i]&&!S[i].ok:Q[i][0]===mode));
+  for(let i=queue.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[queue[i],queue[j]]=[queue[j],queue[i]]}
+  chips();next();
+}
+function next(){
+  const c=$("card");
+  if(!queue.length){
+    c.innerHTML="<h2>"+(mode==="miss"?"No misses to review":"Round complete")+"</h2><p>"+(mode==="miss"?"Answer some questions first. Anything you get wrong will appear here.":"Check your Readiness tab, then retry your misses.")+"</p>";
+    const r=document.createElement("div");r.className="row";
+    const a=document.createElement("button");a.className="btn";a.textContent="View readiness";a.onclick=()=>tab(1);
+    const b=document.createElement("button");b.className="btn alt";b.textContent="Practise again";b.onclick=()=>{mode="all";start()};
+    r.append(a,b);c.appendChild(r);chips();return;
+  }
+  cur=queue.shift();const q=Q[cur];
+  c.innerHTML="";
+  const m=document.createElement("div");m.className="meta";m.textContent=D[q[0]]+" · "+(queue.length)+" left";
+  const h=document.createElement("div");h.className="q";h.textContent=q[1];
+  c.append(m,h);
+  q[2].forEach((t,k)=>{const b=document.createElement("button");b.className="opt";b.textContent=t;b.onclick=()=>answer(k);c.appendChild(b)});
+}
+function answer(k){
+  const q=Q[cur],right=k===q[3];
+  S[cur]={ok:right,n:((S[cur]||{}).n||0)+1};save();
+  const c=$("card");
+  [...c.querySelectorAll(".opt")].forEach((b,i)=>{b.disabled=true;if(i===q[3])b.classList.add("ok");else if(i===k)b.classList.add("bad")});
+  const w=document.createElement("div");w.className="why "+(right?"ok":"bad");
+  const t=document.createElement("b");t.textContent=right?"Correct. ":"Not quite. The answer is “"+q[2][q[3]]+"”. ";
+  w.append(t,document.createTextNode(q[4]));
+  const out=document.createElement("div");out.className="simple";
+  const r=document.createElement("div");r.className="row";
+  const n=document.createElement("button");n.className="btn";n.textContent=queue.length?"Next question":"Finish";n.onclick=next;
+  const e=document.createElement("button");e.className="btn alt";e.textContent="Explain it simpler";e.onclick=()=>explain(e,out,q);
+  r.append(n,e);c.append(w,r,out);chips();
+}
+/* Prompt design for the "Explain it simpler" button (also documented in the README):
+   role + audience, a hard length cap, a local-analogy requirement, and a grounding rule so the model
+   only rephrases the vetted explanation and never adds new exam facts. */
+const SYS="You are a friendly AZ-900 tutor for a first-time cloud learner in East Africa. Re-explain the concept below in plain English in at most 70 words. Use one everyday analogy from daily life in Kenya (for example M-Pesa agents, matatus, a duka or a Nairobi shop). Use only the facts in the official explanation provided; do not add new technical claims. Do not use bullet points.";
+async function explain(btn,out,q){
+  let sample=null;try{sample=await claude.use("sample")}catch(e){}
+  if(!sample){out.textContent="The simpler explanation needs the Claude-powered version of this page. Open the live link from claude.ai to use it.";return}
+  btn.disabled=true;out.textContent="Thinking…";
+  try{
+    const r=await sample(SYS+"\n\nQuestion: "+q[1]+"\nCorrect answer: "+q[2][q[3]]+"\nOfficial explanation: "+q[4],{modelTier:"quick"});
+    out.textContent=r.text;
+  }catch(e){out.textContent="Could not load a simpler explanation right now. Try again in a moment."}
+  btn.disabled=false;
+}
+function dash(){
+  const el=$("dash");el.innerHTML="";
+  const tot=[0,0,0],ok=[0,0,0],seen=[0,0,0],weak=[];
+  Q.forEach((q,i)=>{tot[q[0]]++;if(S[i]){seen[q[0]]++;if(S[i].ok)ok[q[0]]++;else weak.push(i)}});
+  const pc=d=>Math.round(100*ok[d]/tot[d]);
+  const overall=Math.round([0,1,2].reduce((a,d)=>a+pc(d),0)/3);
+  const st=overall>=80?"Ready":overall>=60?"Almost ready":"Not ready yet";
+  const c=document.createElement("div");c.className="card";
+  c.innerHTML='<div class="meta">Overall readiness</div><div class="status"></div><div class="meter" role="img"><i></i></div><p class="meta" style="margin:8px 0 0">Ready at 80%+, almost at 60%+. Unanswered questions count as not yet correct.</p>';
+  c.querySelector(".status").textContent=st+" · "+overall+"%";c.querySelector("i").style.width=overall+"%";
+  [0,1,2].forEach(d=>{const x=document.createElement("div");x.className="dom";x.innerHTML='<b><span></span><span></span></b><div class="meter"><i></i></div>';
+    x.querySelectorAll("span")[0].textContent=D[d];x.querySelectorAll("span")[1].textContent=ok[d]+"/"+tot[d]+" correct, "+seen[d]+" tried";x.querySelector("i").style.width=pc(d)+"%";c.appendChild(x)});
+  const wk=document.createElement("div");wk.className="dom";
+  wk.innerHTML="<b><span>Weak areas</span></b>";
+  if(weak.length){const ul=document.createElement("ul");ul.className="weak";weak.forEach(i=>{const li=document.createElement("li");li.textContent=D[Q[i][0]]+": "+Q[i][1];ul.appendChild(li)});wk.appendChild(ul)}
+  else{const p=document.createElement("p");p.className="meta";p.textContent="Nothing yet. Answer some questions and misses will show up here.";wk.appendChild(p)}
+  c.appendChild(wk);
+  const r=document.createElement("div");r.className="row";
+  const a=document.createElement("button");a.className="btn";a.textContent="Review my misses";a.onclick=()=>{mode="miss";tab(0);start()};
+  const z=document.createElement("button");z.className="btn alt";z.textContent="Reset progress";z.onclick=()=>{if(confirm("Clear all saved progress?")){S={};save();dash();chips()}};
+  r.append(a,z);c.appendChild(r);el.appendChild(c);
+}
+function tab(n){
+  $("t0").setAttribute("aria-selected",String(n===0));$("t1").setAttribute("aria-selected",String(n===1));
+  $("practice").hidden=n!==0;$("dash").hidden=n!==1;if(n===1)dash();
+}
+$("t0").onclick=()=>tab(0);$("t1").onclick=()=>tab(1);
+start();
+</script>
+</body>
+</html>
